@@ -1,4 +1,5 @@
 $(function() {
+    // http://japanese.visitkorea.or.kr/jpn/ATR/SI_JPN_8_1.jsp?cid=2695855
     // http://japanese.visitkorea.or.kr/jpn/TMC/TE_JA_7_6.jsp?cid=2698002
 
     Spinner();
