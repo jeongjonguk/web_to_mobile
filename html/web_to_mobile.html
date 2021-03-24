@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920">
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/mozGetMatchedCSSRules.js"></script>
+<script type="text/javascript" src="../js/loading-spinner.js"></script>
+<script type="text/javascript" src="../dev/common.js"></script>
+<script type="text/javascript" src="../dev/inssa_korea.js"></script>
+<script type="text/javascript" src="../dev/im_vk_writer.js"></script>
+<script type="text/javascript" src="../dev/travel_highlights.js"></script>
+<script type="text/javascript" src="../dev/web_to_mobile.js"></script>
+</head>
+<body>
+	<div class="search_area">
+		<ul class="input_wrap" id="visit-web-site-search-ul">
+			<li>
+				<label class="label01">메뉴</label>
+				<div class="input_inwrap">
+					<select id="visit-web-site-menu-select">
+						<option value="inssa_korea">INSSA KOREA</option>
+						<option value="travel_highlights">TRAVEL HIGHLIGHTS(トピックス)</option>
+						<option value="im_vk_writer">I'M VK WRITER(在韓ブロガー連載コラム)</option>
+					</select>
+				</div>
+			</li>
+			<li>
+				<label class="label01">웹 사이트</label>
+				<div class="input_inwrap">
+					<input id="visit-web-site-url-input" type="text" placeholder="복사할 웹 사이트 주소를 입력하세요." 
+						style="padding-right: 110px;"
+						value="http://japanese.visitkorea.or.kr/jpn/TMC/TE_JA_7_6.jsp?cid=2698002">
+					<button id="visit-web-site-copy-button" class="btn_view" 
+						style="width: 105px; height: 40px; border-radius: 3px; position: absolute; right: 60px; 
+								background: #fff url(../img/icon_buttons.png) no-repeat -305px -2px;">복사하기</button>	
+				</div>
+			</li>
+		</ul>		
+	</div>
+	<iframe id="visit-web-site-iframe" 
+		style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;border:none;" 
+		height="100%" width="100%">
+	</iframe>
+</body>
+</html>
