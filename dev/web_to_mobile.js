@@ -5,6 +5,16 @@ $(function() {
     Spinner();
     Spinner.hide();
 
+    $('#visit-web-site-menu-select').on('click', function() {
+        if ( $(this).val() === 'inssa_korea' ) {
+            $('#visit-web-site-category-select').css({width: '39%', float: 'right', display: 'block'});
+            $('#visit-web-site-menu-select').css({width: '59%', float: 'left'});
+        } else {
+            $('#visit-web-site-category-select').css({width: '0%', float: 'right', display: 'none'});
+            $('#visit-web-site-menu-select').css({width: '100%', float: 'left'});
+        }
+    });
+
     // -----------------------------------------------------------------------------------
     // 복사하기 버튼 클릭(iframe으로 사이트 오픈) 
     // -----------------------------------------------------------------------------------
@@ -30,10 +40,24 @@ $(function() {
         // perform job by menu
         var doc = document.getElementById("visit-web-site-iframe").contentWindow.document
             , menu = $('#visit-web-site-menu-select').val()
+            , category = $('#visit-web-site-category-select').val()
             , result = { content: undefined, title : '' };
         switch ( menu ) {
             case 'inssa_korea':
-                result = inssa_korea.perform(doc);
+                switch ( category ) {
+                    case 'food': 
+                        result = inssa_korea_food.perform(doc);
+                        break;
+                    case 'activity':
+                        result = inssa_korea_activity.perform(doc);
+                        break;
+                    case 'shopping':
+                        result = inssa_korea_shopping.perform(doc);
+                        break;
+                    default:
+                        console.error('unknown category');
+                        break;
+                }
                 break;
             case 'travel_highlights':
                 result = travel_highlights.perform(doc);
@@ -88,7 +112,7 @@ var fnOpenWindow = function(result) {
     html += '<div id="wrapper">';
     html +=     '<div class="gnb03">';
     html +=         '<div class="row">';
-    html +=             '<span class="category">Topic</span>';
+    html +=             '<span class="category">' + result.topic + '</span>';
     html +=         '</div>';
     html +=         '<h2>' + (fnIsEmpty(result.title) ? '타이틀을 찾지 못했습니다' : result.title) + '</h2>';
     html +=     '</div>';

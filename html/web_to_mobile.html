@@ -7,9 +7,12 @@
 <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../js/jquery.getstyleobject.js"></script>
 <script type="text/javascript" src="../js/mozGetMatchedCSSRules.js"></script>
+<script type="text/javascript" src="../js/dom_to_image.js"></script>
 <script type="text/javascript" src="../js/loading-spinner.js"></script>
 <script type="text/javascript" src="../dev/common.js"></script>
-<script type="text/javascript" src="../dev/inssa_korea.js"></script>
+<script type="text/javascript" src="../dev/inssa_korea_food.js"></script>
+<script type="text/javascript" src="../dev/inssa_korea_activity.js"></script>
+<script type="text/javascript" src="../dev/inssa_korea_shopping.js"></script>
 <script type="text/javascript" src="../dev/im_vk_writer.js"></script>
 <script type="text/javascript" src="../dev/travel_highlights.js"></script>
 <script type="text/javascript" src="../dev/web_to_mobile.js"></script>
@@ -20,13 +23,18 @@
 			<li>
 				<label class="label01">메뉴</label>
 				<div class="input_inwrap">
-					<select id="visit-web-site-menu-select">
+					<select id="visit-web-site-menu-select" style="width: 59%; float: left">
 						<option value="inssa_korea">INSSA KOREA</option>
 						<option value="travel_highlights">TRAVEL HIGHLIGHTS(トピックス)</option>
 						<option value="im_vk_writer">I'M VK WRITER(在韓ブロガー連載コラム)</option>
 					</select>
+					<select id="visit-web-site-category-select" style="width: 39%; float: right">
+						<option value="food">Food</option>
+						<option value="activity">Activity</option>
+						<option value="shopping">Shopping</option>
+					<select>
 				</div>
-			</li>
+			</li>		
 			<li>
 				<label class="label01">웹 사이트</label>
 				<div class="input_inwrap">
