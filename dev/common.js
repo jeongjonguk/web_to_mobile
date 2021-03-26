@@ -1,3 +1,15 @@
+
+var vrElementNames = [
+    'html', 'body', 'div', 'span', 'object', 'iframe', 'h1', 'h2', 'h3', 'h4', 'h5'
+  , 'h6', 'p', 'blockquote', 'pre', 'abbr', 'address', 'cite', 'code'
+  , 'del', 'dfn', 'em', 'img', 'ins', 'kbd', 'q', 'samp', 'small', 'strong', 'sub'
+  , 'sup', 'var', 'b', 'i', 'dl', 'dt', 'dd', 'ol', 'ul', 'li'
+  , 'fieldset', 'form', 'label', 'legend', 'table', 'caption', 'tbody', 'tfoot', 'thead'
+  , 'tr', 'th', 'td', 'article', 'aside', 'canvas', 'details'
+  , 'figcaption', 'figure', 'footer', 'header', 'hgroup', 'menu', 'nav', 'section'
+  , 'summary', 'time', 'mark', 'audio', 'video'
+];
+
 // --------------------------------------------------------------------------------
 // fnIsEmpty
 // --------------------------------------------------------------------------------
@@ -77,16 +89,7 @@ var fnStyleSheets = function(element, styleSheets, cssObjToApply) {
     getMatchedCSSRules(element, styleSheets).reverse().filter(function(v) {
         return v.selectorText.split(',').filter(function(w) { 
             // html element에 공통적으로 적용된 CSS는 제외   
-            return [
-                'html', 'body', 'div', 'span', 'object', 'iframe', 'h1', 'h2', 'h3', 'h4', 'h5'
-              , 'h6', 'p', 'blockquote', 'pre', 'abbr', 'address', 'cite', 'code'
-              , 'del', 'dfn', 'em', 'img', 'ins', 'kbd', 'q', 'samp', 'small', 'strong', 'sub'
-              , 'sup', 'var', 'b', 'i', 'dl', 'dt', 'dd', 'ol', 'ul', 'li'
-              , 'fieldset', 'form', 'label', 'legend', 'table', 'caption', 'tbody', 'tfoot', 'thead'
-              , 'tr', 'th', 'td', 'article', 'aside', 'canvas', 'details'
-              , 'figcaption', 'figure', 'footer', 'header', 'hgroup', 'menu', 'nav', 'section'
-              , 'summary', 'time', 'mark', 'audio', 'video'
-            ].indexOf(w.trim()) !== -1; 
+            return vrElementNames.indexOf(w.trim()) !== -1; 
         }).length === 0; 
     })
     .forEach(function(v) {
@@ -114,3 +117,27 @@ var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApply) {
         fnStyleSheetsChildren(v, styleSheets, cssObjToApply);
     });
 };
+
+// -----------------------------------------------------------------------------------
+// mobile anchor
+// -----------------------------------------------------------------------------------
+var fnMobileAnchor = function($content) {
+    $content.find('a').each(function(i, v) {
+        var hrf = $(v).attr('href'), clk = $(v).attr('onclick');
+        if ( fnIsEmpty(hrf) === false && fnIsEmpty(clk) === true ) {
+            $(v).attr('onclick', 'innerUrlParser(\'' + hrf + '\'); return false;');
+            $(v).attr('href', 'javascript:void(0);');
+        }
+    });
+}
+
+// -----------------------------------------------------------------------------------
+// 702px to 100% image
+// -----------------------------------------------------------------------------------
+var fn702pxTo100pcImg = function($content) {
+    $content.find('img').each(function(i, v) {
+        if ( $(v).css('width') !== '100%' && $(v).css('max-width') === '702px' ) {
+            $(v).css('width', '100%');
+        }
+    });
+}

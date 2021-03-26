@@ -1,11 +1,8 @@
 $(function() {
-    // http://japanese.visitkorea.or.kr/jpn/ATR/SI_JPN_8_1.jsp?cid=2695855
-    // http://japanese.visitkorea.or.kr/jpn/TMC/TE_JA_7_6.jsp?cid=2698002
-
     Spinner();
     Spinner.hide();
 
-    $('#visit-web-site-menu-select').on('click', function() {
+    $('#visit-web-site-menu-select').on('change', function() {
         if ( $(this).val() === 'inssa_korea' ) {
             $('#visit-web-site-category-select').css({width: '39%', float: 'right', display: 'block'});
             $('#visit-web-site-menu-select').css({width: '59%', float: 'left'});
@@ -24,6 +21,7 @@ $(function() {
             alert('방문할 웹 사이트 주소를 입력하세요.');
             return false;
         }
+
         $('#visit-web-site-iframe').attr('src', url);
         $('#visit-web-site-iframe').addClass('on');
         Spinner.show();
