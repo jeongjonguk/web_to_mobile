@@ -1,6 +1,6 @@
 !function() {
 	var im_vk_writer = {
-        selector: '.column-wrap'
+        selector: '.board-content div:eq(0)'
         , content: ''
         , title : ''
         , topic: 'I\'m VK writer_在韓ブロガー連載コラム'
@@ -16,7 +16,10 @@
             return im_vk_writer;
         }
 
-         // anchor 
+        // clone
+        $content = $content.clone(true, true);
+
+        // anchor 
         fnMobileAnchor($content);
 
         // set style
@@ -25,6 +28,10 @@
             , 'font-size': ''
         });
 
+        // caption
+        fnMoveImgCaption($content);
+
+        // img width
         fn702pxTo100pcImg($content);
 
         // copy html text

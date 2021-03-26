@@ -20,18 +20,25 @@
             return inssa_korea_shopping;
         }
 
-        var $household = $content.find('.inssa .visual .visual-con .label > span')
-            , $label = $content.find('.inssa .visual-con .label')
+        // household to computed background style
+        fnComputedStyle($content.find('.inssa .visual .visual-con .label > span') , [
+              'background-color'
+            , 'background-repeat'
+            , 'background-position'
+            , 'background-size'
+        ]);
+
+        // clone after applying computed style
+        $content = $content.clone(true, true);
+
+        var $label = $content.find('.inssa .visual-con .label')
             , imageSrc = $content.find('.inssa .visual .visual-con').children('img').attr('src')
             , contentTxt = $content.find('.inssa .visual .txt').html();
 
-        // computed background style
-        fnComputedStyle($household , [
-            'background-color'
-          , 'background-repeat'
-          , 'background-position'
-          , 'background-size'
-        ]);
+        // apply style of anchor in the dd element(word break)
+        $content.find('.tip dl dd a').each(function(i, v) {
+            fnStyleSheets($(v)[0], doc.styleSheets);
+        });
 
         // stylesheet 
         fnStyleSheetsChildren($label[0], doc.styleSheets, { 'font-family': 'inherit'});
@@ -50,7 +57,7 @@
         html +=             '<ul>';
         $content.find('ul.slick-dots > li').each(function(i, v) {
             var $slideImg = $content.find('ul.slick-slider div.slick-track li[aria-describedby="' + $(v).attr('id') + '"]');
-            if ( $slideImg.length !== 0 ) {
+            if ( $slideImg.length !== 0 ) {                
                 html +=         '<li>';
                 html +=             $slideImg.html();
                 html +=             '<div class="descript">';

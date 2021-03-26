@@ -21,20 +21,22 @@
             return inssa_korea_food;
         }
 
-        var $household = $content.find('.inssa .visual .visual-con .label > span')
-            , $label = $content.find('.inssa .visual-con .label')
+        // household to computed background style
+        fnComputedStyle($content.find('.inssa .visual .visual-con .label > span') , [
+              'background-color'
+            , 'background-repeat'
+            , 'background-position'
+            , 'background-size'
+        ]);
+
+        // clone after applying computed style
+        $content = $content.clone(true, true);
+
+        var $label = $content.find('.inssa .visual-con .label')
             , imageSrc = $content.find('.inssa .visual .visual-con').children('img').attr('src')
             , contentTxt = $content.find('.inssa .visual .txt').html()
             , addTxt = $content.find('.content .add-txt').html()
             , tip =  $content.find('.content .tip').html();
-
-        // computed background style
-        fnComputedStyle($household , [
-            'background-color'
-          , 'background-repeat'
-          , 'background-position'
-          , 'background-size'
-        ]);
 
         // stylesheet 
         fnStyleSheetsChildren($label[0], doc.styleSheets, { 'font-family': 'inherit'});
@@ -69,13 +71,16 @@
         html +=             '</ul>';
         html +=         '</div>';
         html +=     '</div>';
-        html +=     '<div>';
-        html +=         '<strong>' + addTxt + '</strong>';
-        html +=     '</div>';
-        html +=     '<div class="tip_box">';
-        html +=         tip;
-        html +=     '</div>';
-
+        if ( fnIsEmpty(addTxt) === false ) {
+            html += '<div>';
+            html +=     '<strong>' + addTxt + '</strong>';
+            html += '</div>';
+        }
+        if ( fnIsEmpty(tip) === false ) {
+            html += '<div class="tip_box">';
+            html +=     tip;
+            html += '</div>';
+        }
         html += '</div>';
 
         inssa_korea_food.content = html;

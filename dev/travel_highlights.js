@@ -1,8 +1,9 @@
 !function() {
 	var travel_highlights = {
-        selector: '.board-content'
-        , content: undefined
+          selector: '.board-content div:eq(0)'
+        , content: ''
         , title : ''
+        , topic: 'トピックス'
     };
 
     travel_highlights.perform = function(doc) {
@@ -15,8 +16,26 @@
             return travel_highlights;
         }
 
-        // copy html text
-        $($content[0]).clone(true, true).each(function(i, v) {
+        // clone
+        $content = $content.clone(true, true);
+
+        // anchor 
+        fnMobileAnchor($content);
+
+        // set style
+        fnStyleSheetsChildren($content[0], doc.styleSheets
+            , {'font-family': 'inherit', 'font-size': ''}
+            , {'color': ''}
+        );
+
+        $content.find('.lasttxt, .last_info, .last_txt').css({'color':'#ff5303'});
+        $content.find('.notice').css({'color':'#cb0000'});
+
+        // caption
+        fnMoveImgCaption($content);
+
+         // copy html text
+        $($content[0]).each(function(i, v) {
             travel_highlights.content += $(v).html();
         });
 

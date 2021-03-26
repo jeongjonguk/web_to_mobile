@@ -65,14 +65,16 @@ var fnComputedStyle = function($element, properties) {
         cssObj = fnParseCssTxt(cssTxt, cssObj);
     }
     
-    properties.forEach(function(v) {
-        var key = v.trim().replace(/\-([a-z])/g, fnCamelize);
-            val = allCss[key];
-        if ( fnIsEmpty(val) === false ) {
-            delete cssObj[key];
-            cssObj[key] = val;
-        }
-    });
+    // if ( fnIsEmpty(properties) === false ) {
+        properties.forEach(function(v) {
+            var key = v.trim().replace(/\-([a-z])/g, fnCamelize);
+                val = allCss[key];
+            if ( fnIsEmpty(val) === false ) {
+                delete cssObj[key];
+                cssObj[key] = val;
+            }
+        });
+    // }
 
     for ( var key in cssObj ) { attr += cssObj[key] + ';'; }
     $element.attr('style', attr);
@@ -81,7 +83,7 @@ var fnComputedStyle = function($element, properties) {
 // -----------------------------------------------------------------------------------
 // styleSheets로부터 스타일을 추출하여 element의 style attribute로 추가
 // -----------------------------------------------------------------------------------
-var fnStyleSheets = function(element, styleSheets, cssObjToApply) {
+var fnStyleSheets = function(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore) {
     var cssTxt = $(element).attr('style')
         , cssObj = {}
         , keyArr = []
@@ -96,6 +98,14 @@ var fnStyleSheets = function(element, styleSheets, cssObjToApply) {
         cssObj = fnParseCssTxt(v.style.cssText, cssObj);
     });
 
+    if ( fnIsEmpty(cssObjToApplyBefore) === false ) {
+        for ( var key in cssObjToApplyBefore ) {
+            var camel = key.trim().replace(/\-([a-z])/g, fnCamelize);
+            delete cssObj[camel];
+            cssObj[camel] = key + ':' + cssObjToApplyBefore[key];
+        }
+    }
+
     if ( fnIsEmpty(cssTxt) === false ) {
         cssObj = fnParseCssTxt(cssTxt, cssObj);
     }
@@ -103,18 +113,18 @@ var fnStyleSheets = function(element, styleSheets, cssObjToApply) {
     for ( var key in cssObj ) { attr += cssObj[key] + ';'; }
     $(element).attr('style', attr);
 
-    if ( fnIsEmpty(cssObjToApply) === false ) {
-        $(element).css(cssObjToApply);
+    if ( fnIsEmpty(cssObjToApplyAfter) === false ) {
+        $(element).css(cssObjToApplyAfter);
     }
 };
 
 // -----------------------------------------------------------------------------------
 // add css to children
 // -----------------------------------------------------------------------------------
-var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApply) {
-    fnStyleSheets(element, styleSheets, cssObjToApply);
+var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore) {
+    fnStyleSheets(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore);
     $(element).children().each(function(i, v) {
-        fnStyleSheetsChildren(v, styleSheets, cssObjToApply);
+        fnStyleSheetsChildren(v, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore);
     });
 };
 
@@ -129,7 +139,7 @@ var fnMobileAnchor = function($content) {
             $(v).attr('href', 'javascript:void(0);');
         }
     });
-}
+};
 
 // -----------------------------------------------------------------------------------
 // 702px to 100% image
@@ -140,4 +150,18 @@ var fn702pxTo100pcImg = function($content) {
             $(v).css('width', '100%');
         }
     });
-}
+};
+
+// -----------------------------------------------------------------------------------
+// move caption to parent next
+// -----------------------------------------------------------------------------------
+var fnMoveImgCaption = function($content) {
+    $content.find('img').siblings('.caption').each(function(i, v) {
+        $(v).attr('style', 'color: #c00000; text-align: center;');
+        $(v).parent().after($(v));
+    });
+    // 16px between caption and image
+    $content.find('.caption').each(function(i, v) {
+        $(v).siblings('img:eq(0)').before('<p>&nbsp;</p>');
+    });
+};
