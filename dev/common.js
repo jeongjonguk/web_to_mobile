@@ -33,23 +33,23 @@ var fnCamelize = function(a, b) {
 // -----------------------------------------------------------------------------------
 //  parse css text
 // -----------------------------------------------------------------------------------
-var fnParseCssTxt = function(a, s) {
-    s = fnIsEmpty(s) === false ? s : {};
-    a.split(";").forEach(function(b) {
+var fnParseCssTxt = function(cssTxt, cssObj) {
+    cssObj = fnIsEmpty(cssObj) === false ? cssObj : {};
+    cssTxt.split(";").forEach(function(b) {
         var p = b.trim().split(':');
         if ( p.length > 2 ) { p = [p.shift(), p.join('|')]; }
         if ( p.length == 2 ) {
             var camel = p[0].trim().replace(/\-([a-z])/g, fnCamelize);
-            if ( fnIsEmpty(s[camel]) === true || p[1].indexOf('!important') !== -1 ) {
-                delete s[camel];
-                s[camel] = b;
-            } else if ( s[camel].split(':')[1].indexOf('!important') === -1 ) {
-                delete s[camel];
-                s[camel] = b;
+            if ( fnIsEmpty(cssObj[camel]) === true || p[1].indexOf('!important') !== -1 ) {
+                delete cssObj[camel];
+                cssObj[camel] = b;
+            } else if ( cssObj[camel].split(':')[1].indexOf('!important') === -1 ) {
+                delete cssObj[camel];
+                cssObj[camel] = b;
             }
         }
     });
-    return s;
+    return cssObj;
 };
 
 // -----------------------------------------------------------------------------------
@@ -165,3 +165,27 @@ var fnMoveImgCaption = function($content) {
         $(v).siblings('img:eq(0)').before('<p>&nbsp;</p>');
     });
 };
+
+// -----------------------------------------------------------------------------------
+// element to png image
+// -----------------------------------------------------------------------------------
+var elementToPng = function(element, filename) {
+    fnUrlToBase64(element);
+    filename = fnIsEmpty(filename) ? 'image.png' : filename;
+    domtoimage.toPng(element)
+    .then(function (dataUrl) {
+        var img = new Image()
+            , a = document.createElement('a');
+        img.src = dataUrl;
+        a.style = 'display: none';
+        a.href = img.src;
+        a.download = filename;
+        document.body.appendChild(a);
+        $('body').append(img);
+            a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            $('body').append(img);
+        });
+    });
+}

@@ -42,6 +42,7 @@
 
         // stylesheet 
         fnStyleSheetsChildren($label[0], doc.styleSheets, { 'font-family': 'inherit'});
+        $label.find('span:eq(0)').next('div:eq(0)').css('padding-top', '15px');
 
         var html = '';
         html += '<div id="TSTSTS" class="inssa ' + inssa_korea_shopping.category + '">';
