@@ -37,7 +37,7 @@ var fnParseCssTxt = function(cssTxt, cssObj) {
     cssObj = fnIsEmpty(cssObj) === false ? cssObj : {};
     cssTxt.split(";").forEach(function(b) {
         var p = b.trim().split(':');
-        if ( p.length > 2 ) { p = [p.shift(), p.join('|')]; }
+        if ( p.length > 2 ) { p = [p.shift(), p.join(':')]; }
         if ( p.length == 2 ) {
             var camel = p[0].trim().replace(/\-([a-z])/g, fnCamelize);
             if ( fnIsEmpty(cssObj[camel]) === true || p[1].indexOf('!important') !== -1 ) {
@@ -65,7 +65,7 @@ var fnComputedStyle = function($element, properties) {
         cssObj = fnParseCssTxt(cssTxt, cssObj);
     }
     
-    // if ( fnIsEmpty(properties) === false ) {
+    if ( fnIsEmpty(properties) === false ) {
         properties.forEach(function(v) {
             var key = v.trim().replace(/\-([a-z])/g, fnCamelize);
                 val = allCss[key];
@@ -74,7 +74,9 @@ var fnComputedStyle = function($element, properties) {
                 cssObj[key] = val;
             }
         });
-    // }
+    } else {
+        cssObj = allCss;
+    }
 
     for ( var key in cssObj ) { attr += cssObj[key] + ';'; }
     $element.attr('style', attr);
@@ -170,7 +172,7 @@ var fnMoveImgCaption = function($content) {
 // element to png image
 // -----------------------------------------------------------------------------------
 var elementToPng = function(element, filename) {
-    fnUrlToBase64(element);
+    // fnUrlToBase64(element);
     filename = fnIsEmpty(filename) ? 'image.png' : filename;
     domtoimage.toPng(element)
     .then(function (dataUrl) {
@@ -182,10 +184,28 @@ var elementToPng = function(element, filename) {
         a.download = filename;
         document.body.appendChild(a);
         $('body').append(img);
-            a.click();
-        setTimeout(function () {
-            document.body.removeChild(a);
-            $('body').append(img);
-        });
+        a.click();
+        // setTimeout(function () {
+        //     document.body.removeChild(a);
+        //     $('body').append(img);
+        // }, 1000);
     });
+
+    // html2canvas(element,  { 
+    //         logging: true
+    //         , letterRendering: 1
+    //         , allowTaint: false
+    //         , proxy: 'Server'
+    //         , useCORS: true 
+    // }).then(canvas => {
+    //     var img = new Image()
+    //         , a = document.createElement('a');
+    //     img.src = canvas;
+    //     a.style = 'display: none';
+    //     a.href = img.src;
+    //     a.download = filename;
+    //     document.body.appendChild(a);
+    //     $('body').append(img);
+    //     a.click();
+    // });
 }

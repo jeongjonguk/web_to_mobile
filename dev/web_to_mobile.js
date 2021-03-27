@@ -80,6 +80,7 @@ $(function() {
 var fnOpenWindow = function(result) {
     if ( fnIsEmpty(result) || fnIsEmpty(result.content) ) {
         alert('Not found element!')
+        location.reload();
         return false;
     }
 
