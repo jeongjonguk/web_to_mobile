@@ -180,25 +180,55 @@ var fnMoveImgCaption = function($content) {
 // -----------------------------------------------------------------------------------
 // element to png image
 // -----------------------------------------------------------------------------------
-var elementToPng = function(element, filename) {
+var fnElementToPng = function(element, url, filename) {
     filename = fnIsEmpty(filename) ? 'image.png' : filename;
-
     domtoimage.toPng(element)
     .then(function (dataUrl) {
-        var img = new Image()
-            , a = document.createElement('a');
-        img.src = dataUrl;
-        a.style = 'display: none';
-        a.href = img.src;
-        a.download = filename;
-        document.body.appendChild(a);
-        $('body').append(img);
-        a.click();
-        setTimeout(function () {
-            document.body.removeChild(a);
-            $('body').append(img);
-        }, 1000);
+        var canvas = document.createElement('canvas')
+            , context = canvas.getContext('2d')
+            , bgImage = new Image()
+            , imageObj2 = new Image();
+        bgImage.src = dataUrl;
+        bgImage.onload = function() {
+            context.globalAlpha = 1;
+            context.drawImage(bgImage, 0, 0, this.width, this.height);
+            imageObj2.src = url;
+            imageObj2.onload = function() {
+                context.globalAlpha = 1;
+                context.drawImage(imageObj2, 13, 13, 44, 44);
+                var img = new Image()
+                    , a = document.createElement('a');
+                img.src = canvas.toDataURL();
+                a.style = 'display: none';
+                a.href = img.src;
+                a.download = filename;
+                document.body.appendChild(a);
+                $('body').append(img);
+                a.click();
+                setTimeout(function () {
+                    document.body.removeChild(a);
+                    $('body').append(img);
+                }, 1000);
+            }
+        };
     });
+
+    // domtoimage.toPng(element)
+    // .then(function (dataUrl) {
+    //     var img = new Image()
+    //         , a = document.createElement('a');
+    //     img.src = dataUrl;
+    //     a.style = 'display: none';
+    //     a.href = img.src;
+    //     a.download = filename;
+    //     document.body.appendChild(a);
+    //     $('body').append(img);
+    //     a.click();
+    //     setTimeout(function () {
+    //         document.body.removeChild(a);
+    //         $('body').append(img);
+    //     }, 1000);
+    // });
 
     // html2canvas(element,  { 
     //         logging: true
@@ -292,6 +322,9 @@ var fnResizeAndCropByUrl = function(url, dstW, dstH, filename) {
     imageObj.src = url;
 };
 
+// -----------------------------------------------------------------------------------
+// is red color
+// -----------------------------------------------------------------------------------
 var isRedColor = function(rgbType){
     // 컬러값과 쉼표만 남기고 삭제
     var rgb = rgbType.trim().replace(/[^%,.\d]/g, "" ).split( ",");

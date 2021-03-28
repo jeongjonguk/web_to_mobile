@@ -88,6 +88,9 @@
         html +=     '</div>';
         html += '</div>';
 
+        fnStyleSheetsChildren($(doc).find('.inssa .visual-con .label')[0], doc.styleSheets);
+        fnElementToPng($(doc).find('.inssa .visual-con .label')[0], 'http://tong.visitkorea.or.kr/img/vk/common_intl/InssaKorea/images/main/shopping/icon_household.png');
+
         inssa_korea_shopping.content = html;
         return inssa_korea_shopping;
     };
