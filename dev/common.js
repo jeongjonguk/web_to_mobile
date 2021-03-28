@@ -1,4 +1,3 @@
-
 var vrElementNames = [
     'html', 'body', 'div', 'span', 'object', 'iframe', 'h1', 'h2', 'h3', 'h4', 'h5'
   , 'h6', 'p', 'blockquote', 'pre', 'abbr', 'address', 'cite', 'code'
@@ -34,6 +33,7 @@ var fnCamelize = function(a, b) {
 //  parse css text
 // -----------------------------------------------------------------------------------
 var fnParseCssTxt = function(cssTxt, cssObj) {
+    cssTxt = fnIsEmpty(cssTxt) === false ? cssTxt : '';
     cssObj = fnIsEmpty(cssObj) === false ? cssObj : {};
     cssTxt.split(";").forEach(function(b) {
         var p = b.trim().split(':');
@@ -85,11 +85,18 @@ var fnComputedStyle = function($element, properties) {
 // -----------------------------------------------------------------------------------
 // styleSheets로부터 스타일을 추출하여 element의 style attribute로 추가
 // -----------------------------------------------------------------------------------
-var fnStyleSheets = function(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore) {
+var fnStyleSheets = function(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore, callbackBefore) {
     var cssTxt = $(element).attr('style')
         , cssObj = {}
         , keyArr = []
         , attr = '';
+
+    // css 파일에 의해 적용된 특정 sytle이 제거되지 않도록 style attribute에 추가 
+    if ( typeof callbackBefore !== undefined && $.isFunction(callbackBefore) ) {
+        cssTxt = callbackBefore(element);
+    }
+
+    // css 파일에 의해 적용된 style 파싱
     getMatchedCSSRules(element, styleSheets).reverse().filter(function(v) {
         return v.selectorText.split(',').filter(function(w) { 
             // html element에 공통적으로 적용된 CSS는 제외   
@@ -100,6 +107,7 @@ var fnStyleSheets = function(element, styleSheets, cssObjToApplyAfter, cssObjToA
         cssObj = fnParseCssTxt(v.style.cssText, cssObj);
     });
 
+    // style attribute 보다 우선 순위가 낮은 스타일 적용  
     if ( fnIsEmpty(cssObjToApplyBefore) === false ) {
         for ( var key in cssObjToApplyBefore ) {
             var camel = key.trim().replace(/\-([a-z])/g, fnCamelize);
@@ -115,6 +123,7 @@ var fnStyleSheets = function(element, styleSheets, cssObjToApplyAfter, cssObjToA
     for ( var key in cssObj ) { attr += cssObj[key] + ';'; }
     $(element).attr('style', attr);
 
+    // style attribute 보다 우선 순위가 높은 스타일 적용  
     if ( fnIsEmpty(cssObjToApplyAfter) === false ) {
         $(element).css(cssObjToApplyAfter);
     }
@@ -123,10 +132,10 @@ var fnStyleSheets = function(element, styleSheets, cssObjToApplyAfter, cssObjToA
 // -----------------------------------------------------------------------------------
 // add css to children
 // -----------------------------------------------------------------------------------
-var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore) {
-    fnStyleSheets(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore);
+var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore, callbackBefore) {
+    fnStyleSheets(element, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore, callbackBefore);
     $(element).children().each(function(i, v) {
-        fnStyleSheetsChildren(v, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore);
+        fnStyleSheetsChildren(v, styleSheets, cssObjToApplyAfter, cssObjToApplyBefore, callbackBefore);
     });
 };
 
@@ -211,3 +220,90 @@ var elementToPng = function(element, filename) {
     //     console.log(e);
     // });
 }
+
+// -----------------------------------------------------------------------------------
+// calculate minimum size and offset
+// -----------------------------------------------------------------------------------
+var fnMinSize = function(srcW, srcH, dstW, dstH) {
+    var ratioW = dstW / srcW
+        , ratioH = dstH / srcH;
+    if ( srcH * ratioW >= dstH ) {
+        return {
+            width: (srcW * ratioW).toFixed(2)
+            , height: (srcH * ratioW).toFixed(2)
+            , x: 0
+            , y: ((srcH * ratioW - dstH) / 2).toFixed(2)
+            , ratioW: ratioW
+            , ratioH: ratioH
+        };
+    } else if ( srcW * ratioH >= dstW ) {
+        return {
+            width: (srcW * ratioH).toFixed(2)
+            , height: (srcH * ratioH).toFixed(2)
+            , x: ((srcW * ratioH - dstW) / 2).toFixed(2)
+            , y: 0
+            , ratioW: ratioW
+            , ratioH: ratioH
+        };
+    }
+    return { width: 0, height: 0, x: 0, y: 0, ratioX: 0, ratioY: 0 };
+};
+
+// -----------------------------------------------------------------------------------
+// resize and crop image by url
+// -----------------------------------------------------------------------------------
+var fnResizeAndCropByUrl = function(url, dstW, dstH, filename) {
+    //  create a canvas and get its context.
+    var cpCanvas = document.createElement('canvas')
+        , cpContext = cpCanvas.getContext('2d')
+        , rsCanvas = document.createElement('canvas')
+        , rsContext = rsCanvas.getContext('2d')
+        , filename = fnIsEmpty(filename) ? 'image.png' : filename
+        , imageObj = new Image();
+
+    imageObj.onload = function() {
+        var minSize = fnMinSize(this.width, this.height, dstW, dstH)
+
+        cpCanvas.width = minSize.width;
+        cpCanvas.height = minSize.height;
+
+        // set the dimensions at the wanted size.
+        rsCanvas.width = minSize.width;
+        rsCanvas.height = minSize.height;
+        // resize the image with the canvas method drawImage();
+        rsContext.drawImage(this, 0, 0, minSize.width, minSize.height);
+        // draw cropped image
+        cpContext.drawImage(rsCanvas, 0, 0, minSize.width, minSize.height, minSize.x, minSize.y, dstW, dstH);
+        // download image
+        var img = new Image()
+            , a = document.createElement('a');
+        img.src = cpCanvas.toDataURL();
+        a.style = 'display: none';
+        a.href = img.src;
+        a.download = filename;
+        document.body.appendChild(a);
+        $('body').append(img);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            $('body').append(img);
+        }, 1000);
+    };
+    imageObj.src = url;
+};
+
+var isRedColor = function(rgbType){
+    // 컬러값과 쉼표만 남기고 삭제
+    var rgb = rgbType.trim().replace(/[^%,.\d]/g, "" ).split( ",");
+    
+    if ( rgb.length !== 3 ) { return false; }
+    rgb.forEach(function (str, x, arr) { 
+        // 컬러값이 "%"일 경우
+        if ( str.indexOf( "%" ) > -1 ) {
+            str = Math.round( parseFloat(str) * 2.55 ); 
+        }
+        arr[ x ] = str; 
+    });
+
+    return rgb[0] >= rgb[1] && rgb[0] >= rgb[2];
+} 

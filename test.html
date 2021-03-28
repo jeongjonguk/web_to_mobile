@@ -9,25 +9,64 @@
     </style>
   </head>
   <body>
-    <canvas id="myCanvas" width="578" height="200"></canvas>
+    <canvas id="myCanvas" width="200" height="150"></canvas>
     <script>
+      var fnMinSize = function(srcW, srcH, dstW, dstH) {
+        var ratioW = dstW / srcW
+          , ratioH = dstH / srcH;
+        if ( srcH * ratioW >= dstH ) {
+          return {
+              width: (srcW * ratioW).toFixed(2)
+            , height: (srcH * ratioW).toFixed(2)
+            , x: 0
+            , y: ((srcH * ratioW - dstH) / 2).toFixed(2)
+          };
+        } else if ( srcW * ratioH >= dstW ) {
+          return {
+              width: (srcW * ratioH).toFixed(2)
+            , height: (srcH * ratioH).toFixed(2)
+            , x: ((srcW * ratioH - dstW) / 2).toFixed(2)
+            , y: 0
+          };
+        }
+        return { width: 0, height: 0 };
+      };
+
       var canvas = document.getElementById('myCanvas');
       var context = canvas.getContext('2d');
       var imageObj = new Image();
 
       imageObj.onload = function() {
-        // draw cropped image
-        var sourceX = 150;
-        var sourceY = 0;
-        var sourceWidth = 150;
-        var sourceHeight = 150;
-        var destWidth = sourceWidth;
-        var destHeight = sourceHeight;
-        var destX = canvas.width / 2 - destWidth / 2;
-        var destY = canvas.height / 2 - destHeight / 2;
+              // We create a canvas and get its context.
+              var canvas1 = document.createElement('canvas');
+              var ctx1 = canvas1.getContext('2d');
 
-        context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+              var srcW = 438, srcH = 300, dstW = 200, dstH = 150;
+              
+              var minSize = fnMinSize(srcW, srcH, dstW, dstH); 
+
+                // We set the dimensions at the wanted size.
+                canvas1.width = minSize.width;
+                canvas1.height = minSize.height;
+
+                // We resize the image with the canvas method drawImage();
+                ctx1.drawImage(this, 0, 0, 219, 150);
+
+        // draw cropped image
+        var sourceX = 0;
+        var sourceY = 0;
+        var sourceWidth = minSize.width;
+        var sourceHeight = minSize.height;
+        // var sourceWidth = 150;
+        // var sourceHeight = 150;
+        var destWidth = dstW;
+        var destHeight = dstH;
+        var destX = minSize.x;
+        var destY = minSize.y;
+
+        context.drawImage(canvas1, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
       };
+      // 438 * 300
       imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
     </script>
   </body>

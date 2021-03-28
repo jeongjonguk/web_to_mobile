@@ -16,17 +16,32 @@
             return travel_highlights;
         }
 
+        // set style
+        fnStyleSheetsChildren($content[0], doc.styleSheets
+            , {'font-family': 'inherit', 'font-size': ''}
+            // , {'color': ''}
+            , {}
+            , function(ele) {
+                var $ele = $(ele)
+                    , cssTxt = $ele.attr('style')
+                    , cssObj = fnParseCssTxt(cssTxt)
+                    , attr = '';
+                if ( ele.nodeName === 'SPAN' && fnIsEmpty(cssObj['color']) == true ) {
+                    var allCss = $ele.getStyleObject(), color = allCss['color'];
+                    if ( isRedColor(color.split(':')[1]) === true ) {
+                        cssTxt += + ';' + color + ';';
+                        $ele.attr('style', cssTxt);
+                    }
+                }
+                return cssTxt;
+            }
+        );
+
         // clone
         $content = $content.clone(true, true);
 
         // anchor 
         fnMobileAnchor($content);
-
-        // set style
-        fnStyleSheetsChildren($content[0], doc.styleSheets
-            , {'font-family': 'inherit', 'font-size': ''}
-            , {'color': ''}
-        );
 
         $content.find('.lasttxt, .last_info, .last_txt').css({'color':'#ff5303'});
         $content.find('.notice').css({'color':'#cb0000'});

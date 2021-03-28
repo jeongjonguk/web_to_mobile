@@ -4,6 +4,8 @@
         , content: ''
         , title : ''
         , topic: 'I\'m VK writer_在韓ブロガー連載コラム'
+        , thumbWidth: 300
+        , thumbHeight: 150
     };
 
     im_vk_writer.perform = function(doc) {
@@ -38,6 +40,12 @@
         $($content[0]).each(function(i, v) {
             im_vk_writer.content += $(v).html();
         });
+
+        // thumb image -> p:not(.jp_bnr) img:not([alt="banner"]):eq(0)
+        var $thumbImg = $(doc).find(im_vk_writer.selector + ' img:not([alt="banner"]):eq(0)');
+        fnResizeAndCropByUrl($thumbImg.attr('src'), 
+                im_vk_writer.thumbWidth, 
+                im_vk_writer.thumbHeight);
 
         return im_vk_writer;
     };
