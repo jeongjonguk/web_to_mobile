@@ -21,7 +21,7 @@
         }
 
         // household to computed background style
-        fnComputedStyle($content.find('.inssa .visual .visual-con .label > span') , [
+        fnComputedStyle($content.find('.inssa .visual .visual-con .label > span:eq(0)') , [
               'background-color'
             , 'background-repeat'
             , 'background-position'
@@ -88,8 +88,19 @@
         html +=     '</div>';
         html += '</div>';
 
-        fnStyleSheetsChildren($(doc).find('.inssa .visual-con .label')[0], doc.styleSheets);
-        fnElementToPng($(doc).find('.inssa .visual-con .label')[0], 'http://tong.visitkorea.or.kr/img/vk/common_intl/InssaKorea/images/main/shopping/icon_household.png');
+        // var $labelLayer =  $(doc).find(inssa_korea_shopping.selector +' .inssa .visual-con .label');
+        // fnStyleSheetsChildren($labelLayer[0], doc.styleSheets);
+        // var thumbCss = $labelLayer.find('span:eq(0)');
+        // if ( thumbCss.length > 0 ) {
+        //     var thumbUrl = thumbCss.getStyleObject()['backgroundImage'];
+        //     thumbUrl = fnIsEmpty(thumbUrl) === false ? thumbUrl : '';
+        //     thumbUrl = thumbUrl.trim().split(':');
+        //     thumbUrl = [thumbUrl.shift(), thumbUrl.join(':')];
+        //     if ( thumbUrl.length === 2 ) {
+        //         thumbUrl = thumbUrl[1].replace(/(url\(|\)|")/g, '');
+        //         fnElementToPng($labelLayer[0], [{url: thumbUrl, x: 13, y: 13, width: 44, height: 44}]);
+        //     }
+        // }
 
         inssa_korea_shopping.content = html;
         return inssa_korea_shopping;

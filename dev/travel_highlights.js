@@ -19,7 +19,6 @@
         // set style
         fnStyleSheetsChildren($content[0], doc.styleSheets
             , {'font-family': 'inherit', 'font-size': ''}
-            // , {'color': ''}
             , {}
             , function(ele) {
                 var $ele = $(ele)

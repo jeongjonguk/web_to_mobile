@@ -187,15 +187,15 @@ var fnElementToPng = function(element, url, filename) {
         var canvas = document.createElement('canvas')
             , context = canvas.getContext('2d')
             , bgImage = new Image()
-            , imageObj2 = new Image();
+            , thImage = new Image();
         bgImage.src = dataUrl;
         bgImage.onload = function() {
             context.globalAlpha = 1;
             context.drawImage(bgImage, 0, 0, this.width, this.height);
-            imageObj2.src = url;
-            imageObj2.onload = function() {
+            thImage.src = 'http://tong.visitkorea.or.kr/img/vk/common_intl/InssaKorea/images/main/shopping/icon_household.png';
+            thImage.onload = function() {
                 context.globalAlpha = 1;
-                context.drawImage(imageObj2, 13, 13, 44, 44);
+                context.drawImage(thImage, 13, 13, 44, 44);
                 var img = new Image()
                     , a = document.createElement('a');
                 img.src = canvas.toDataURL();
@@ -212,6 +212,100 @@ var fnElementToPng = function(element, url, filename) {
             }
         };
     });
+}
+
+// -----------------------------------------------------------------------------------
+// load image from url
+// -----------------------------------------------------------------------------------
+var fnLoadLayerImage = function(layers, callback, index) {
+    index = fnIsEmpty(index) === false ? index : 0;
+    if ( fnIsEmpty(layers) === true || index >= layers.length ) {
+        callback(layers);
+        return;
+    }
+    var layer = layers[index];
+    if ( fnIsEmpty(layer.url) === true ) {
+        callback(layers);
+        return;
+    }
+    var image = new Image();
+    image.src = layer.url;
+    image.onload = function() {
+        layer.image = image
+        fnLoadLayerImage(layers, callback, index + 1);
+    }
+};
+
+// -----------------------------------------------------------------------------------
+// element to png image
+// -----------------------------------------------------------------------------------
+var fnElementToPngBck = function(element, layers, filename) {
+    filename = fnIsEmpty(filename) ? 'image.png' : filename;
+    domtoimage.toBlob(element)
+    .then(function (dataUrl) {
+        var canvas = document.createElement('canvas')
+            , context = canvas.getContext('2d')
+            , image = new Image();
+        image.src = dataUrl;
+        image.onload = function() {
+            context.globalAlpha = 1
+            context.drawImage(image, 0, 0, this.width, this.height);
+            fnLoadLayerImage(layers, function(v) {
+                v.forEach(function(layer) {
+                    context.globalAlpha = 1
+                    context.globalAlpha = fnIsEmpty(layer.alpha + '') === false ? layer.alpha : 1;
+                    context.drawImage(layer.image, layer.x, layer.y, layer.width, layer.height);
+                });
+                var img = new Image()
+                    , a = document.createElement('a');
+                img.src = canvas.toDataURL();
+                a.style = 'display: none';
+                a.href = img.src;
+                a.download = filename;
+                document.body.appendChild(a);
+                $('body').append(img);
+                setTimeout(function () {
+                    a.click();
+                    document.body.removeChild(a);
+                    document.body.removeChild(img);
+                }, 3000);
+            });
+        };
+    });
+
+
+    // domtoimage.toPng(element)
+    // .then(function (dataUrl) {
+    //     var canvas = document.createElement('canvas')
+    //         , context = canvas.getContext('2d')
+    //         , bgImage = new Image()
+    //         , imageObj2 = new Image();
+    //     bgImage.src = dataUrl;
+    //     bgImage.onload = function() {
+    //         context.globalAlpha = 1;
+    //         context.drawImage(bgImage, 0, 0, this.width, this.height);
+    //         imageObj2.src = 'http://tong.visitkorea.or.kr/img/vk/common_intl/InssaKorea/images/main/shopping/icon_household.png';
+    //         imageObj2.onload = function() {
+    //             context.globalAlpha = 1;
+    //             context.drawImage(imageObj2, 13, 13, 44, 44);
+    //             var img = new Image()
+    //                 , a = document.createElement('a');
+    //             img.src = canvas.toDataURL();
+    //             a.style = 'display: none';
+    //             a.href = img.src;
+    //             a.download = filename;
+    //             document.body.appendChild(a);
+    //             $('body').append(img);
+    //             a.click();
+    //             setTimeout(function () {
+    //                 document.body.removeChild(a);
+    //                 $('body').append(img);
+    //             }, 1000);
+    //         }
+    //     };
+    // });
+
+
 
     // domtoimage.toPng(element)
     // .then(function (dataUrl) {
@@ -226,15 +320,11 @@ var fnElementToPng = function(element, url, filename) {
     //     a.click();
     //     setTimeout(function () {
     //         document.body.removeChild(a);
-    //         $('body').append(img);
+    //         $('body').remove(img);
     //     }, 1000);
     // });
 
-    // html2canvas(element,  { 
-    //         logging: true
-    //         , letterRendering: 1
-    //         , proxy: 'http://localhost:3740/'
-    // }).then(canvas => {
+    // html2canvas(element).then(canvas => {
     //     var img = new Image()
     //         , a = document.createElement('a');
     //     img.crossOrigin = "Anonymous";
