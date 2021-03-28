@@ -172,8 +172,8 @@ var fnMoveImgCaption = function($content) {
 // element to png image
 // -----------------------------------------------------------------------------------
 var elementToPng = function(element, filename) {
-    // fnUrlToBase64(element);
     filename = fnIsEmpty(filename) ? 'image.png' : filename;
+
     domtoimage.toPng(element)
     .then(function (dataUrl) {
         var img = new Image()
@@ -185,21 +185,20 @@ var elementToPng = function(element, filename) {
         document.body.appendChild(a);
         $('body').append(img);
         a.click();
-        // setTimeout(function () {
-        //     document.body.removeChild(a);
-        //     $('body').append(img);
-        // }, 1000);
+        setTimeout(function () {
+            document.body.removeChild(a);
+            $('body').append(img);
+        }, 1000);
     });
 
     // html2canvas(element,  { 
     //         logging: true
     //         , letterRendering: 1
-    //         , allowTaint: false
-    //         , proxy: 'Server'
-    //         , useCORS: true 
+    //         , proxy: 'http://localhost:3740/'
     // }).then(canvas => {
     //     var img = new Image()
     //         , a = document.createElement('a');
+    //     img.crossOrigin = "Anonymous";
     //     img.src = canvas;
     //     a.style = 'display: none';
     //     a.href = img.src;
@@ -207,5 +206,8 @@ var elementToPng = function(element, filename) {
     //     document.body.appendChild(a);
     //     $('body').append(img);
     //     a.click();
+    // })
+    // .catch(e => {
+    //     console.log(e);
     // });
 }
