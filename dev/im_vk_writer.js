@@ -4,8 +4,8 @@
         , content: ''
         , title : ''
         , topic: 'I\'m VK writer_在韓ブロガー連載コラム'
-        , thumbWidth: 300
-        , thumbHeight: 150
+        , thumbWidth: 332
+        , thumbHeight: 164
     };
 
     im_vk_writer.perform = function(doc) {
