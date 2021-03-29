@@ -1,7 +1,6 @@
 !function() {
 	var inssa_korea_activity = {
             selector: '.board-content'
-          , category: 'shopping'
           , content: ''
           , title : ''
           , topic: ''
@@ -20,33 +19,24 @@
             return inssa_korea_activity;
         }
 
-        // household to computed background style
-        fnComputedStyle($content.find('.inssa .visual .visual-con .label > span') , [
-              'background-color'
-            , 'background-repeat'
-            , 'background-position'
-            , 'background-size'
-        ]);
-
         // clone after applying computed style
         $content = $content.clone(true, true);
 
-        var $label = $content.find('.inssa .visual-con .label')
+        var   category = $('#visit-web-site-category-select').val()
+            , lang = new URL($('#visit-web-site-url-input').val())
+            , lang = lang.pathname.substring(0, lang.pathname.indexOf("/",2)).replace('/', '')
+            , type = $content.find('.inssa .visual-con .label div:eq(0) p').html()
             , imageSrc = $content.find('.inssa .visual .visual-con').children('img').attr('src')
-            , contentTxt = $content.find('.inssa .visual .txt').html();
+            , contentTxt = $content.find('.inssa .visual .txt').html()
+            , html = '';
 
         // apply style of anchor in the dd element(word break)
         $content.find('.tip dl dd a').each(function(i, v) {
             fnStyleSheets($(v)[0], doc.styleSheets);
         });
 
-        // stylesheet 
-        fnStyleSheetsChildren($label[0], doc.styleSheets, { 'font-family': 'inherit'});
-        $label.find('span:eq(0)').next('div:eq(0)').css('padding-top', '15px');
-
-        var html = '';
-        html += '<div id="TSTSTS" class="inssa ' + inssa_korea_activity.category + '">';
-        html +=     $label[0].outerHTML;
+        html += '<div class="inssa ' + category + '">';
+        html +=     '<img alt="" class="inssa_level" src="' + label_image.get(category, lang, type) + '"></img>';
         html +=     '<div>';
         html +=         '<img alt="" src="' + imageSrc + '" width="100%">';
         html +=     '</div>';
