@@ -144,8 +144,11 @@ var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApplyAfter, c
 // -----------------------------------------------------------------------------------
 var fnMobileAnchor = function($content) {
     $content.find('a').each(function(i, v) {
-        var hrf = $(v).attr('href'), clk = $(v).attr('onclick');
-        if ( fnIsEmpty(hrf) === false && fnIsEmpty(clk) === true ) {
+        var hrf = $(v).attr('href')
+            , hrf = fnIsEmpty(hrf) === false ? hrf : ''
+            , cid = href.indexOf('?cid=')
+            , clk = $(v).attr('onclick');
+        if ( cid === true && fnIsEmpty(clk) === true ) {
             $(v).attr('onclick', 'innerUrlParser(\'' + hrf + '\'); return false;');
             $(v).attr('href', 'javascript:void(0);');
         }
