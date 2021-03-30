@@ -431,3 +431,31 @@ var isRedColor = function(rgbType){
 //         console.log(e);
 //     });
 // }
+
+
+    var post_to_url = function(path, params, method, target) {
+        method = method || "post";
+    
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+        form.setAttribute("target", target);
+    
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+    
+                form.appendChild(hiddenField);
+             }
+        }
+    
+        document.body.appendChild(form);
+        form.submit();
+    };
+    post_to_url('url', {
+        field1:'value1',
+        field2:'value2'
+    }, 'post');

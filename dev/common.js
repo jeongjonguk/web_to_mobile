@@ -146,9 +146,9 @@ var fnMobileAnchor = function($content) {
     $content.find('a').each(function(i, v) {
         var hrf = $(v).attr('href')
             , hrf = fnIsEmpty(hrf) === false ? hrf : ''
-            , cid = href.indexOf('?cid=')
+            , cid = hrf.indexOf('?cid=')
             , clk = $(v).attr('onclick');
-        if ( cid === true && fnIsEmpty(clk) === true ) {
+        if ( cid !== -1 && fnIsEmpty(clk) === true ) {
             $(v).attr('onclick', 'innerUrlParser(\'' + hrf + '\'); return false;');
             $(v).attr('href', 'javascript:void(0);');
         }
@@ -171,12 +171,8 @@ var fn702pxTo100pcImg = function($content) {
 // -----------------------------------------------------------------------------------
 var fnMoveImgCaption = function($content) {
     $content.find('img').siblings('.caption').each(function(i, v) {
-        $(v).attr('style', 'color: #c00000; text-align: center;');
+        $(v).attr('style', 'color: #c00000; text-align: center; margin-bottom: 16px;');
         $(v).parent().after($(v));
-    });
-    // 16px between caption and image
-    $content.find('.caption').each(function(i, v) {
-        $(v).siblings('img:eq(0)').before('<p>&nbsp;</p>');
     });
 };
 

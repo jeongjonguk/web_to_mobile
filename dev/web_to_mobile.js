@@ -154,6 +154,33 @@ var fnOpenWindow = function(result) {
     html += '</div>';
     $body.append(html);
 
+    $body.attr('onload', 'function() { console.log("11111111111111111111111"); };')
+
+    // var tooltip = '';
+    // tooltip +=  '<script>';
+    // tooltip +=  '$(\'.content .textArea .txt a[href="javascript:void(0);"]\').on("mouseover", function() {';
+    // tooltip +=      '$(this).append(\'<div class="box">\' + $(this).attr("onclick") + \'</div>\');';
+    // tooltip +=  '}, function() {';
+    // tooltip +=      '$(document).find("div.box").remove();';
+    // tooltip +=  '});';
+    // tooltip +=  '</script>';
+    // $body.append(tooltip);
+
+
+//     var box = document.querySelectorAll('.content .textArea .txt a[href="javascript:void(0);"]');
+// box .forEach(function(input) {
+//   input.addEventListener('mouseover', function hover(event) {
+// 	var div = document.createElement('div');
+// 	div.className = 'box';
+// 	div.textContent  = '1111111111111111';
+// 	this.appendChild(div);
+//   });
+
+//   input.addEventListener('mouseleave', function leave() {
+// document.querySelectorAll(".box").forEach(e => e.parentNode.removeChild(e));
+//   });
+// });
+
 
     $head.append('<title>Visit Korea</title>');
     $head.append('<meta content="text/html; charset=utf-8" http-equiv="Content-Type">');
@@ -168,4 +195,7 @@ var fnOpenWindow = function(result) {
     $head.append('<script charset="utf-8" type="text/javascript" src="http://m.app.visitkorea.or.kr/static/_scripts/innerlink.js"></script>');
     $head.append('<script charset="utf-8" type="text/javascript" src="http://m.app.visitkorea.or.kr/static/_scripts/common/common.js"></script>');
     $head.append('<script src="http://m.app.visitkorea.or.kr/static/_scripts/jquery.number.min.js"></script>');
+    $head.append('<style>.content .textArea .txt a[href="javascript:void(0);"] { font-size: 32px !important; color: green !important; }</style>');
+
+
 };
