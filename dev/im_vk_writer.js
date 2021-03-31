@@ -26,7 +26,7 @@
         $content = $content.clone(true, true);
 
         // anchor 
-        im_vk_writer.cids = fnMobileAnchor($content);
+        im_vk_writer.cids = fnMobileAnchor($content, doc.styleSheets);
 
         // set style
         fnStyleSheetsChildren($content[0], doc.styleSheets, {

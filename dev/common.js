@@ -142,9 +142,10 @@ var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApplyAfter, c
 // -----------------------------------------------------------------------------------
 // mobile anchor
 // -----------------------------------------------------------------------------------
-var fnMobileAnchor = function($content, cids) {
+var fnMobileAnchor = function($content, styleSheets, cids) {
     cids = fnIsEmpty(cids) === false ? cids : [];
     $content.find('a').each(function(i, v) {
+        fnStyleSheets(v, styleSheets, {'color': ''})
         var hrf = $(v).attr('href')
             , hrf = fnIsEmpty(hrf) === false ? hrf + '&ctypeid=unknown' : ''
             , cid = hrf.indexOf('?cid=')

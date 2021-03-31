@@ -37,7 +37,7 @@
             , html = '';
 
         // anchor 
-        inssa_korea_food.cids = fnMobileAnchor($content);
+        inssa_korea_food.cids = fnMobileAnchor($content, doc.styleSheets);
 
         html += '<div class="inssa ' + category + '">';
         html +=     '<img alt="" class="inssa_level" src="' + label_image.get(category, inssa_korea_food.lang, type) + '"></img>';

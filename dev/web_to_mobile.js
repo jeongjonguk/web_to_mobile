@@ -65,6 +65,9 @@ $(function() {
             case 'im_vk_writer':
                 result = im_vk_writer.perform(doc, lang);
                 break;
+            case 'travel_news':
+                result = travel_news.perform(doc, lang);
+                break;
             default:
                 console.error('unknown menu');
                 break;

@@ -1,0 +1,63 @@
+<html>
+   <head>
+      <title>Visit Korea</title>
+      <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+      <meta content="telephone=no" name="format-detection">
+      <meta content="width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,user-scalable=no,target-densitydpi=high-dpi" name="viewport">
+      <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="http://m.app.visitkorea.or.kr/static/_styles/yun_plus.css">
+      <link rel="stylesheet" type="text/css" href="http://m.app.visitkorea.or.kr/static/_styles/mobile.css">
+      <link rel="stylesheet" type="text/css" href="http://m.app.visitkorea.or.kr/static/_styles/common_v1708.css">
+      <link rel="stylesheet" type="text/css" href="http://m.app.visitkorea.or.kr/static/_styles/common_v1810.css">
+      <script charset="utf-8" type="text/javascript" src="http://m.app.visitkorea.or.kr/static/_scripts/common/jquery-2.0.2.min.js"></script><script charset="utf-8" type="text/javascript" src="http://m.app.visitkorea.or.kr/static/_scripts/innerlink.js"></script><script charset="utf-8" type="text/javascript" src="http://m.app.visitkorea.or.kr/static/_scripts/common/common.js"></script><script src="http://m.app.visitkorea.or.kr/static/_scripts/jquery.number.min.js"></script>
+      <style>.content .textArea .txt a[onClick*="&ctypeid=unknown"] { font-size: 32px !important; color: green !important; }</style>
+      <script>console.log('$.post("/planner/getContent", {"contentId": "281736", "lang":"jp"}, function(data) {var ctypeid = "cid=281736" + " => ";if ( data.detailCommon.result === "OK" && data.detailCommon.retcode === "RET0000" ) {ctypeid += data.detailCommon.list[0].contenttypeid;} else {ctypeid += "failed!!!";}console.log(ctypeid);});$.post("/planner/getContent", {"contentId": "2612346", "lang":"jp"}, function(data) {var ctypeid = "cid=2612346" + " => ";if ( data.detailCommon.result === "OK" && data.detailCommon.retcode === "RET0000" ) {ctypeid += data.detailCommon.list[0].contenttypeid;} else {ctypeid += "failed!!!";}console.log(ctypeid);});$.post("/planner/getContent", {"contentId": "1998896", "lang":"jp"}, function(data) {var ctypeid = "cid=1998896" + " => ";if ( data.detailCommon.result === "OK" && data.detailCommon.retcode === "RET0000" ) {ctypeid += data.detailCommon.list[0].contenttypeid;} else {ctypeid += "failed!!!";}console.log(ctypeid);});');document.querySelectorAll('.content .textArea .txt a[onClick*="&ctypeid=unknown"]').forEach(function(input) {input.addEventListener("mouseover", function hover() {var old = this.querySelectorAll(".ctypeid-unknown");if ( old.length === 0 ) {var div = document.createElement("div");div.className = "ctypeid-unknown";div.setAttribute("style", "position: absolute; width: 150px; background-color: black;color: #fff; font-size: 18px !important; text-align: center; border-radius: 6px;padding: 5px 0; z-index: 1; bottom: 100%; left: 0%;");div.textContent  = this.getAttribute("onclick").split("?")[1].split("&")[0];this.appendChild(div);this.style.position = "relative";}});input.addEventListener("mouseleave", function leave() {document.querySelectorAll(".ctypeid-unknown").forEach(e => {e.parentNode.position = "";e.parentNode.removeChild(e)});});});</script>
+   </head>
+   <body>
+      <button onclick="var copyToClipboard = function () {var str = document.getElementById('copy-target-content').innerHTML;function listener(e) {e.clipboardData.setData('text/html', str);e.clipboardData.setData('text/plain', str);e.preventDefault();}document.addEventListener('copy', listener);document.execCommand('copy');document.removeEventListener('copy', listener);alert('클립보드에 복사되었습니다');};copyToClipboard();" style="position: fixed;right: 2%;top: 20px; z-index: 999;inline-block;height:32px;line-height:30px;outline:none;font-family:'NotoKrM';color:#0c346a;border-radius:15px;padding:0 12px;background-color:#ffd907;">복사하기</button>
+      <div id="wrapper">
+         <div class="gnb03">
+            <div class="row"><span class="category">トピックス</span></div>
+            <h2>[韓国・観光] 2021年上半期・景福宮夜間観覧、4月1日から開始</h2>
+         </div>
+         <div>
+            <div class="content">
+               <div class="view_img">
+                  <div class="pictext2"></div>
+               </div>
+               <div class="textArea">
+                  <div class="txt" id="copy-target-content">
+                     <!-- CMS 컨텐측 입력 -->
+
+
+
+						  		
+				
+				
+
+
+                     <!-- CMS 컨텐측 입력 끝 -->  
+                  </div>
+               </div>
+            </div>
+         </div>
+         <form id="frmError" onsubmit="return false;">
+            <div class="report_wrap">
+               <div class="report_inwrap">
+                  <a class="btn_report" href="#">情報に誤りがありましたらご一報下さい。</a>
+                  <div class="report_cont">
+                     <textarea class="textarea" id="errorText" name="errorText"></textarea>
+                     <div class="btn_wrap"><button class="btn-cancel">取り消し</button><button class="btn-submit">送信</button></div>
+                  </div>
+               </div>
+               <span class="report_answer display-none">貴重なご意見ありがとうございます。</span>
+            </div>
+            <input id="type" name="type" type="hidden" value="content"><input id="content_id" name="content_id" type="hidden" value=""><input id="content_type_id" name="content_type_id" type="hidden" value=""><input id="content_title" name="content_title" type="hidden" value="ロマンチックな夜を演出！ ソウル首都圏で楽しむ光のページェント"><input id="lang" name="lang" type="hidden" value="jp">
+         </form>
+         <div class="wrap-loading display-none">
+            <div class="loading-img"><img src="/static/_images/app3.0/icon_translating@3x.png"></div>
+            <div class="loading-txt">TRANSLATING, PLEASE WAIT</div>
+         </div>
+      </div>
+   </body>
+</html>

@@ -44,7 +44,7 @@
         $content = $content.clone(true, true);
 
         // anchor 
-        travel_highlights.cids = fnMobileAnchor($content);
+        travel_highlights.cids = fnMobileAnchor($content, doc.styleSheets);
 
         $content.find('.lasttxt, .last_info, .last_txt').css({'color':'#ff5303'});
         $content.find('.notice').css({'color':'#cb0000'});
