@@ -4,9 +4,13 @@
           , content: ''
           , title : ''
           , topic: ''
+          , cids: []
+          , lang: ''
 	};
 
-    inssa_korea_food.perform = function(doc) {
+    inssa_korea_food.perform = function(doc, lang) {
+        inssa_korea_food.lang = lang;
+
         // title text
         inssa_korea_food.title = $(doc).find('.board-view-title h3').html();
 
@@ -24,8 +28,6 @@
         $content = $content.clone(true, true);
 
         var   category = $('#visit-web-site-category-select').val()
-            , lang = new URL($('#visit-web-site-url-input').val())
-            , lang = lang.pathname.substring(0, lang.pathname.indexOf("/",2)).replace('/', '')
             , type = $content.find('.inssa .visual-con .label div:eq(0) p').html()
             , imageSrc = $content.find('.inssa .visual .visual-con').children('img').attr('src')
             , contentTxt = $content.find('.inssa .visual .txt').html()
@@ -33,8 +35,12 @@
             , addTxt = $content.find('.content .add-txt').html()
             , tip =  $content.find('.content .tip').html()
             , html = '';
+
+        // anchor 
+        inssa_korea_food.cids = fnMobileAnchor($content);
+
         html += '<div class="inssa ' + category + '">';
-        html +=     '<img alt="" class="inssa_level" src="' + label_image.get(category, lang, type) + '"></img>';
+        html +=     '<img alt="" class="inssa_level" src="' + label_image.get(category, inssa_korea_food.lang, type) + '"></img>';
         html +=     '<div>';
         html +=         '<img alt="" src="' + imageSrc + '" width="100%">';
         html +=     '</div>';

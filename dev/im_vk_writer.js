@@ -1,14 +1,18 @@
 !function() {
 	var im_vk_writer = {
-        selector: '.board-content div:eq(0)'
+          selector: '.board-content div:eq(0)'
         , content: ''
         , title : ''
         , topic: 'I\'m VK writer_在韓ブロガー連載コラム'
         , thumbWidth: 332
         , thumbHeight: 240
+        , cids: []
+        , lang: ''
     };
 
-    im_vk_writer.perform = function(doc) {
+    im_vk_writer.perform = function(doc, lang) {
+        im_vk_writer.lang = lang;
+        
         // title text
         im_vk_writer.title = $(doc).find('.board-view-title h3').html();
 
@@ -22,7 +26,7 @@
         $content = $content.clone(true, true);
 
         // anchor 
-        fnMobileAnchor($content);
+        im_vk_writer.cids = fnMobileAnchor($content);
 
         // set style
         fnStyleSheetsChildren($content[0], doc.styleSheets, {

@@ -93,16 +93,13 @@
 	};
 
     label_image.get = function(category, language, type) {
-        console.log(category + ', ' + language + ', ' + type);
         var url = '';
         Object.keys(label_image).forEach(function(c) {
             if ( c == category ) {
                 var cate = label_image[c];
-                console.log(cate);
                 Object.keys(cate).forEach(function(l) {
                     if ( l == language) {
                         var lang = cate[l];
-                        console.log(lang);
                         Object.keys(lang).forEach(function(t) {
                             if ( t.toLocaleLowerCase() == type.toLocaleLowerCase() ) {
                                 url = lang[t];

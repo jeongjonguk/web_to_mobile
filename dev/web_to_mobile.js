@@ -39,18 +39,20 @@ $(function() {
         var doc = document.getElementById("visit-web-site-iframe").contentWindow.document
             , menu = $('#visit-web-site-menu-select').val()
             , category = $('#visit-web-site-category-select').val()
-            , result = { content: undefined, title : '' };
+            , lang = new URL($('#visit-web-site-url-input').val())
+            , lang = lang.pathname.substring(0, lang.pathname.indexOf("/",2)).replace('/', '')
+            , result = { 'content': undefined, 'lang': lang, 'title' : '' };
         switch ( menu ) {
             case 'inssa_korea':
                 switch ( category ) {
                     case 'food': 
-                        result = inssa_korea_food.perform(doc);
+                        result = inssa_korea_food.perform(doc, lang);
                         break;
                     case 'activity':
-                        result = inssa_korea_activity.perform(doc);
+                        result = inssa_korea_activity.perform(doc, lang);
                         break;
                     case 'shopping':
-                        result = inssa_korea_shopping.perform(doc);
+                        result = inssa_korea_shopping.perform(doc, lang);
                         break;
                     default:
                         console.error('unknown category');
@@ -58,10 +60,10 @@ $(function() {
                 }
                 break;
             case 'travel_highlights':
-                result = travel_highlights.perform(doc);
+                result = travel_highlights.perform(doc, lang);
                 break;
             case 'im_vk_writer':
-                result = im_vk_writer.perform(doc);
+                result = im_vk_writer.perform(doc, lang);
                 break;
             default:
                 console.error('unknown menu');
@@ -69,7 +71,7 @@ $(function() {
         }
 
         // open new window
-        fnOpenWindow(result);
+        fnOpenWindow(result, menu, category);
         Spinner.hide();
     });
 });
@@ -83,6 +85,12 @@ var fnOpenWindow = function(result) {
         location.reload();
         return false;
     }
+
+    var lang = result.lang === 'jpn' ? 'jp' : (
+        result.lang === 'enu' ? 'en' : (
+            result.lang === 'chs' || result.lang === 'cht' ? 'cn' : ''
+        )
+    );
 
     var w = window.open()
         , $head = $(w.document.head)
@@ -145,7 +153,7 @@ var fnOpenWindow = function(result) {
     html +=         '<input id="content_id" name="content_id" type="hidden" value="">';
     html +=         '<input id="content_type_id" name="content_type_id" type="hidden" value="">';
     html +=         '<input id="content_title" name="content_title" type="hidden" value="ロマンチックな夜を演出！ ソウル首都圏で楽しむ光のページェント">';
-    html +=         '<input id="lang" name="lang" type="hidden" value="jp">';
+    html +=         '<input id="lang" name="lang" type="hidden" value="' + lang + '">';
     html +=     '</form>';
     html +=     '<div class="wrap-loading display-none">';
     html +=         '<div class="loading-img"><img src="/static/_images/app3.0/icon_translating@3x.png"></div>';
@@ -153,34 +161,6 @@ var fnOpenWindow = function(result) {
     html +=     '</div>';
     html += '</div>';
     $body.append(html);
-
-    $body.attr('onload', 'function() { console.log("11111111111111111111111"); };')
-
-    // var tooltip = '';
-    // tooltip +=  '<script>';
-    // tooltip +=  '$(\'.content .textArea .txt a[href="javascript:void(0);"]\').on("mouseover", function() {';
-    // tooltip +=      '$(this).append(\'<div class="box">\' + $(this).attr("onclick") + \'</div>\');';
-    // tooltip +=  '}, function() {';
-    // tooltip +=      '$(document).find("div.box").remove();';
-    // tooltip +=  '});';
-    // tooltip +=  '</script>';
-    // $body.append(tooltip);
-
-
-//     var box = document.querySelectorAll('.content .textArea .txt a[href="javascript:void(0);"]');
-// box .forEach(function(input) {
-//   input.addEventListener('mouseover', function hover(event) {
-// 	var div = document.createElement('div');
-// 	div.className = 'box';
-// 	div.textContent  = '1111111111111111';
-// 	this.appendChild(div);
-//   });
-
-//   input.addEventListener('mouseleave', function leave() {
-// document.querySelectorAll(".box").forEach(e => e.parentNode.removeChild(e));
-//   });
-// });
-
 
     $head.append('<title>Visit Korea</title>');
     $head.append('<meta content="text/html; charset=utf-8" http-equiv="Content-Type">');
@@ -195,7 +175,48 @@ var fnOpenWindow = function(result) {
     $head.append('<script charset="utf-8" type="text/javascript" src="http://m.app.visitkorea.or.kr/static/_scripts/innerlink.js"></script>');
     $head.append('<script charset="utf-8" type="text/javascript" src="http://m.app.visitkorea.or.kr/static/_scripts/common/common.js"></script>');
     $head.append('<script src="http://m.app.visitkorea.or.kr/static/_scripts/jquery.number.min.js"></script>');
-    $head.append('<style>.content .textArea .txt a[href="javascript:void(0);"] { font-size: 32px !important; color: green !important; }</style>');
+    $head.append('<style>.content .textArea .txt a[onClick*="&ctypeid=unknown"] { font-size: 32px !important; color: green !important; }</style>');
 
+    var cidToCTypeId = '';
+    if ( fnIsEmpty(result.cids) === false ) {
+        result.cids.forEach(function(v) {
+            cidToCTypeId += '$.post("/planner/getContent", {"contentId": "' + v + '", "lang":"' + lang + '"}, function(data) {';
+            cidToCTypeId +=     'var ctypeid = "cid=' + v + '" + " => ";';
+            cidToCTypeId +=     'if ( data.detailCommon.result === "OK" && data.detailCommon.retcode === "RET0000" ) {';
+            cidToCTypeId +=         'ctypeid += data.detailCommon.list[0].contenttypeid;';
+            cidToCTypeId +=     '} else {';
+            cidToCTypeId +=         'ctypeid += "failed!!!";';
+            cidToCTypeId +=     '}';
+            cidToCTypeId +=     'console.log(ctypeid);';
+            cidToCTypeId += '});';
+        });
+    }
+
+    var ctypeidUnknown = '';
+    ctypeidUnknown +=   '<script>';
+    ctypeidUnknown +=   'console.log(\'' + cidToCTypeId + '\');';
+    ctypeidUnknown +=   'document.querySelectorAll(\'.content .textArea .txt a[onClick*="&ctypeid=unknown"]\').forEach(function(input) {';
+    ctypeidUnknown +=       'input.addEventListener("mouseover", function hover() {';
+    ctypeidUnknown +=           'var old = this.querySelectorAll(".ctypeid-unknown");';
+    ctypeidUnknown +=           'if ( old.length === 0 ) {';
+    ctypeidUnknown +=               'var div = document.createElement("div");';
+    ctypeidUnknown +=               'div.className = "ctypeid-unknown";';
+    ctypeidUnknown +=               'div.setAttribute("style", "position: absolute; width: 150px; background-color: black;';
+    ctypeidUnknown +=               'color: #fff; font-size: 18px !important; text-align: center; border-radius: 6px;';
+    ctypeidUnknown +=               'padding: 5px 0; z-index: 1; bottom: 100%; left: 0%;");';
+    ctypeidUnknown +=               'div.textContent  = this.getAttribute("onclick").split("?")[1].split("&")[0];';
+    ctypeidUnknown +=               'this.appendChild(div);';
+    ctypeidUnknown +=               'this.style.position = "relative";';
+    ctypeidUnknown +=           '}';
+    ctypeidUnknown +=       '});';
+    ctypeidUnknown +=       'input.addEventListener("mouseleave", function leave() {';
+    ctypeidUnknown +=           'document.querySelectorAll(".ctypeid-unknown").forEach(e => {';
+    ctypeidUnknown +=               'e.parentNode.position = "";';
+    ctypeidUnknown +=               'e.parentNode.removeChild(e)';
+    ctypeidUnknown +=           '});';
+    ctypeidUnknown +=       '});';
+    ctypeidUnknown +=   '});';
+    ctypeidUnknown +=   '</script>';
+    $head.append(ctypeidUnknown);
 
 };

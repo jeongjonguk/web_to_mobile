@@ -142,17 +142,23 @@ var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApplyAfter, c
 // -----------------------------------------------------------------------------------
 // mobile anchor
 // -----------------------------------------------------------------------------------
-var fnMobileAnchor = function($content) {
+var fnMobileAnchor = function($content, cids) {
+    cids = fnIsEmpty(cids) === false ? cids : [];
     $content.find('a').each(function(i, v) {
         var hrf = $(v).attr('href')
-            , hrf = fnIsEmpty(hrf) === false ? hrf : ''
+            , hrf = fnIsEmpty(hrf) === false ? hrf + '&ctypeid=unknown' : ''
             , cid = hrf.indexOf('?cid=')
             , clk = $(v).attr('onclick');
         if ( cid !== -1 && fnIsEmpty(clk) === true ) {
             $(v).attr('onclick', 'innerUrlParser(\'' + hrf + '\'); return false;');
             $(v).attr('href', 'javascript:void(0);');
+            var contentId = hrf.split('?cid=')[1].split('&')[0];
+            if ( cids.indexOf(contentId) === -1 ) {
+                cids.push(contentId);
+            }
         }
     });
+    return cids;
 };
 
 // -----------------------------------------------------------------------------------

@@ -459,3 +459,25 @@ var isRedColor = function(rgbType){
         field1:'value1',
         field2:'value2'
     }, 'post');
+
+
+    $.post("/planner/getContent", {"contentId": "2042110", "lang":"jp"}, function(data){
+        var ctypeid = "cid=2042110" + " => ";
+        if ( data.detailCommon.result === "OK" && data.detailCommon.retcode === "RET0000" ) {
+            ctypeid += data.detailCommon.list[0].contenttypeid;
+        } else {
+            ctypeid += "failed!!!";
+        }
+        console.log(ctypeid);
+    });
+    $.post("/planner/getContent", {"contentId": "281152", "lang":"jp"}, function(data){
+        var ctypeid = "cid=281152" + " => ";
+        if ( data.detailCommon.result === "OK" && data.detailCommon.retcode === "RET0000" ) {
+            ctypeid += data.detailCommon.list[0].contenttypeid;
+        } else {
+            ctypeid += "failed!!!";
+        }
+        console.log(ctypeid);
+    });
+
+

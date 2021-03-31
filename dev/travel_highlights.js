@@ -4,9 +4,13 @@
         , content: ''
         , title : ''
         , topic: 'トピックス'
+        , cids: []
+        , lang: ''
     };
 
-    travel_highlights.perform = function(doc) {
+    travel_highlights.perform = function(doc, lang) {
+        travel_highlights.lang = lang;
+        
         // title text
         travel_highlights.title = $(doc).find('.board-view-title h3').html();
 
@@ -40,7 +44,7 @@
         $content = $content.clone(true, true);
 
         // anchor 
-        fnMobileAnchor($content);
+        travel_highlights.cids = fnMobileAnchor($content);
 
         $content.find('.lasttxt, .last_info, .last_txt').css({'color':'#ff5303'});
         $content.find('.notice').css({'color':'#cb0000'});
