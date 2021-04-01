@@ -145,7 +145,7 @@ var fnStyleSheetsChildren = function(element, styleSheets, cssObjToApplyAfter, c
 var fnMobileAnchor = function($content, styleSheets, cids) {
     cids = fnIsEmpty(cids) === false ? cids : [];
     $content.find('a').each(function(i, v) {
-        fnStyleSheets(v, styleSheets, {'color': ''})
+        fnStyleSheets(v, styleSheets, {'color': '', 'word-break': 'break-all'})
         var hrf = $(v).attr('href')
             , hrf = fnIsEmpty(hrf) === false ? hrf + '&ctypeid=unknown' : ''
             , cid = hrf.indexOf('?cid=')

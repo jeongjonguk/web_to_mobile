@@ -35,7 +35,7 @@
         // anchor 
         inssa_korea_shopping.cids = fnMobileAnchor($content, doc.styleSheets);
 
-        // apply style of anchor in the dd element(word break)
+        // apply style of anchor in the dd element(word-break: break-all;)
         $content.find('.tip dl dd a').each(function(i, v) {
             fnStyleSheets($(v)[0], doc.styleSheets);
         });

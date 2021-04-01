@@ -53,8 +53,12 @@
         // anchor 
         travel_news.cids = fnMobileAnchor($content, doc.styleSheets);
 
+        // red color
         $content.find('.lasttxt, .last_info, .last_txt').css({'color':'#ff5303'});
         $content.find('.notice').css({'color':'#cb0000'});
+
+        // .img_line 100% img
+        $content.find('.img_line > img').css('width', '100%');
 
         // caption
         fnMoveImgCaption($content);
