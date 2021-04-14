@@ -48,9 +48,72 @@
 
         $content.find('.lasttxt, .last_info, .last_txt').css({'color':'#ff5303'});
         $content.find('.notice').css({'color':'#cb0000'});
-
+        
         // caption
         fnMoveImgCaption($content);
+
+        // img width
+        fn702pxTo100pcImg($content, '.title_icon');
+
+        // image height
+        fnRemoveHeight100pc($content);
+
+        // var $title = $content.find('.visual p.title')
+        //     , background = $title.css('background')
+        //     , url = background.replace(/(url\(|\)|")/g, '').split(' ')[0]
+        //     , html = '';
+        // if ( fnIsEmpty(background) === false && fnIsEmpty(url) === false && url.indexOf('http') === 0 ) {
+        //     $content.find('.visual').css('padding', '0 0 32px 0');
+        //     $title.find('span').attr('style', 'display: block; color: rgb(255, 213, 53); font-size: 36px !important;')
+        //     $title.attr('style', 'position: relative;');
+        //     $title.html('<img src="' + url + '" style="width: 100%;">'
+        //             + '<span style="position: absolute; top: 120px; left: 30px; '
+        //             + 'font-size: 36px !important; line-height: 1.04; '
+        //             + 'font-weight: bold;">' + $title.html() + '</span>');
+        // }
+
+        // visual image
+        var $title = $content.find('.visual p.title')
+            , $titleSpan = $title.find('span')
+            , titleStyle = $title.attr('style')
+            , spanStyle = $titleSpan.attr('style');
+        $title.attr('style', titleStyle + '; background-size: cover; font-size: 42px !important;');
+        $titleSpan.attr('style', spanStyle + '; font-size: 42px !important;');
+        $content.find('.visual').css('padding', '0 0 32px 0');
+
+        // slider
+        $content.find('.slider-w').each(function(a, b) {
+            var html = '<div style="overflow-x: auto; overflow-y: hidden; z-index: 101; width: 100%; padding: 10px; counter-reset: my-sec-counter;">';
+            html += '<ul style="display: flex; list-style-type: none; padding-left: 0; margin-left: 0;">';
+            $(b).find('ul.slick-dots > li').each(function(i, v) {
+                var $li = $(b).find('ul.slick-slider div.slick-track li[aria-describedby="' + $(v).attr('id') + '"]')
+                    , $img = $li.find('img')
+                    , $dsc = $li.find('p');
+                if ( $img.length !== 0 ) {
+                    $img.attr('style', 'max-width: 450px;' + (i !== 0 ? 'margin-left: 10px;' : ''));
+                    html += '<li>';
+                    html +=     $img[0].outerHTML;
+                    html +=         '<div class="descript" style="text-align: center;">';
+                    html +=             '<strong>' + $dsc.html() + '</strong>';
+                    html +=         '</div>'
+                    html += '</li>';
+                }
+            });
+            html += '</ul></div>'
+            $(b).html(html);
+        });
+
+        // dt style
+        $content.find('.box-w p.title').css('text-align', 'left');
+        $content.find('.box-w dl').css('padding', '0');
+        $content.find('.box-w dt, .box-w dd').css('padding', '0 0 0 26px');
+        $content.find('.box-w dt.address').css('background', 'url(http://tong.visitkorea.or.kr/img/vk/enu/inssaKorea/images/column/icon_address.png) left center no-repeat');
+        $content.find('.box-w dt.directions').css('background', 'url(http://tong.visitkorea.or.kr/img/vk/enu/inssaKorea/images/column/icon_directions.png) left center no-repeat');
+        $content.find('.box-w dt.operating').css('background', 'url(http://tong.visitkorea.or.kr/img/vk/enu/inssaKorea/images/column/icon_operating.png) left center no-repeat');
+        $content.find('.box-w dt.fees').css('background', 'url(http://tong.visitkorea.or.kr/img/vk/enu/inssaKorea/images/column/icon_fees.png) left center no-repeat');
+        $content.find('.box-w dt.inquiries').css('background', 'url(http://tong.visitkorea.or.kr/img/vk/enu/inssaKorea/images/column/icon_inquiries.png) left center no-repeat');
+        $content.find('.box-w dt.website').css('background', 'url(http://tong.visitkorea.or.kr/img/vk/enu/inssaKorea/images/column/icon_website.png) left center no-repeat');
+        $content.find('.box-w dt.facilities').css('background', 'url(http://tong.visitkorea.or.kr/img/vk/enu/inssaKorea/images/column/icon_facilities.png) left center no-repeat');
 
          // copy html text
         $($content[0]).each(function(i, v) {

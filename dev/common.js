@@ -165,8 +165,9 @@ var fnMobileAnchor = function($content, styleSheets, cids) {
 // -----------------------------------------------------------------------------------
 // 702px to 100% image
 // -----------------------------------------------------------------------------------
-var fn702pxTo100pcImg = function($content) {
-    $content.find('img').each(function(i, v) {
+var fn702pxTo100pcImg = function($content, not) {
+    var $img = fnIsEmpty(not) === false ? $content.find('img:not(' + not + ')') : $content.find('img');
+    $img.find('img').each(function(i, v) {
         if ( $(v).css('width') !== '100%' && $(v).css('max-width') === '702px' ) {
             $(v).css('width', '100%');
         }
@@ -271,4 +272,15 @@ var isRedColor = function(rgbType){
     });
 
     return rgb[0] >= rgb[1] && rgb[0] >= rgb[2];
-} 
+} ;
+
+// -----------------------------------------------------------------------------------
+// resize image by width
+// -----------------------------------------------------------------------------------
+var fnRemoveHeight100pc = function($content) {
+    $content.find('img').each(function(i, v) {
+        if ( $(v).css('width') === '100%' && $(v).css('height') === '100%' ) {
+            $(v).css('height', '');
+        }
+    });
+};
