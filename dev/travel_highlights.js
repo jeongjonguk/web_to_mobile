@@ -76,7 +76,7 @@
                     , $img = $li.find('img')
                     , $dsc = $li.find('p');
                 if ( $img.length !== 0 ) {
-                    $img.attr('style', 'max-width: 300px; width: 270px' + (i !== 0 ? 'margin-left: 10px;' : ''));
+                    $img.attr('style', 'max-width: 300px; width: 270px;' + (i !== 0 ? 'margin-left: 10px;' : ''));
                     html += '<li>';
                     html +=     $img[0].outerHTML;
                     html +=         '<div class="descript" style="text-align: center;">';
