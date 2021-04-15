@@ -58,20 +58,6 @@
         // image height
         fnRemoveHeight100pc($content);
 
-        // var $title = $content.find('.visual p.title')
-        //     , background = $title.css('background')
-        //     , url = background.replace(/(url\(|\)|")/g, '').split(' ')[0]
-        //     , html = '';
-        // if ( fnIsEmpty(background) === false && fnIsEmpty(url) === false && url.indexOf('http') === 0 ) {
-        //     $content.find('.visual').css('padding', '0 0 32px 0');
-        //     $title.find('span').attr('style', 'display: block; color: rgb(255, 213, 53); font-size: 36px !important;')
-        //     $title.attr('style', 'position: relative;');
-        //     $title.html('<img src="' + url + '" style="width: 100%;">'
-        //             + '<span style="position: absolute; top: 120px; left: 30px; '
-        //             + 'font-size: 36px !important; line-height: 1.04; '
-        //             + 'font-weight: bold;">' + $title.html() + '</span>');
-        // }
-
         // visual image
         var $title = $content.find('.visual p.title')
             , $titleSpan = $title.find('span')
@@ -90,7 +76,7 @@
                     , $img = $li.find('img')
                     , $dsc = $li.find('p');
                 if ( $img.length !== 0 ) {
-                    $img.attr('style', 'max-width: 450px;' + (i !== 0 ? 'margin-left: 10px;' : ''));
+                    $img.attr('style', 'max-width: 300px; width: 270px' + (i !== 0 ? 'margin-left: 10px;' : ''));
                     html += '<li>';
                     html +=     $img[0].outerHTML;
                     html +=         '<div class="descript" style="text-align: center;">';
