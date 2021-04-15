@@ -58,6 +58,15 @@
         // image height
         fnRemoveHeight100pc($content);
 
+        $content.find('.container img.title_icon').each(function(i, v) {
+            var html = '';
+            $(v).attr('style', '');
+            html += '<div style="width: 100%; text-align: center; margin: 37px 0 10px 0;">';
+            html += $(v)[0].outerHTML;
+            html += '</div>';
+            $(v)[0].outerHTML = html;
+        });
+
         // visual image
         var $title = $content.find('.visual p.title')
             , $titleSpan = $title.find('span')
